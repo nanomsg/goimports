@@ -1,0 +1,8 @@
+# goimports
+
+This repo is used to host the `go.nanomsg.org` vanity import service. 
+It is adapted from https://github.com/line/go-import-redirects.
+
+To add a package, see add-redirect.sh
+
+Every package exported must be added here to be importable via that URL.
