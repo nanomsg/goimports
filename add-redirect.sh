@@ -4,17 +4,24 @@
 # It is modified here for go.nanomsg.org.
 # The upstream was missing any clear license.
 
+case "$1" in
+-v*)
+	VERS="${1#-}"
+	shift
+	;;
+esac
+
 if [[ $# -ne 2 ]] && [[ $# -ne 3 ]]; then
-  echo "Usage: $0 <src> <dest> [<suffix>]"
+  echo "Usage: $0 [-v{vers}] <src> <dest> [<suffix>]"
   echo "Examples:"
   echo
   echo "1) $0 foo bar"
   echo
-  echo "   'import \"go.nanomsg.org/foo\"' is redirected to 'https://github.com/nanomsg/bar.git'"
+  echo "   'import \"go.nanomsg.org/foo/[v{vers}/]\"' is redirected to 'https://github.com/nanomsg/bar.git'"
   echo
   echo "2) $0 foo bar qux"
   echo
-  echo "   'import \"go.nanomsg.org/foo/qux\"' is redirected to the package 'qux' in 'https://github.com/nanomsg/bar.git'"
+  echo "   'import \"go.nanomsg.org/foo/[v{vers}/]qux\"' is redirected to the package 'qux' in 'https://github.com/nanomsg/bar.git'"
   echo
   exit 1
 fi
@@ -43,6 +50,9 @@ IMPORT_ROOT="go.nanomsg.org/$SRC"
 GODOC_URL="https://godoc.org/$IMPORT_ROOT"
 
 SRC_DIR="$SRC"
+if [[ -n "$VERS" ]]; then
+	SRC_DIR="${SRC_DIR}/${VERS}"
+fi
 if [[ -n "$SUFFIX" ]]; then
   GODOC_URL="$GODOC_URL/$SUFFIX"
   SRC_DIR="$SRC_DIR/$SUFFIX"
